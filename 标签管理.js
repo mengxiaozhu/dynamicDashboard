@@ -14,6 +14,14 @@ eval({
                 handler(list)
 
             })
+        },
+        ready: function (ctx) {
+            var self = ctx("this")
+            self.config.funcs.get(ctx, "cgi-bin/groups/get", {}, function (data) {
+                self.config.children.groups.options = data.groups.map(function (item) {
+                    return item;
+                })
+            })
         }
     },
     children: {
