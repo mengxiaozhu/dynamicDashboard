@@ -1,5 +1,5 @@
 eval({
-  label: "统计面板",
+  label: "标签管理",
   funcs: {
       datacube: function (ctx, api, mapper) {
           var self = ctx("this")
