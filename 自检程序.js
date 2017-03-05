@@ -46,7 +46,7 @@ eval({
                 if (data.primary_industry && data.primary_industry.first_class != "教育" && data.secondary_industry && data.secondary_industry.first_class != "教育") {
                     templateError = "模板行业选择有误,无法开启推送模板"
                 }
-                self.config.children.errorPage.children.templateError.value = templateError || "无"
+                self.config.children.errorPage.children.templateError.value = templateError || "正常"
             })
         }
     },
