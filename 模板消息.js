@@ -38,10 +38,12 @@ eval({
                 })
 
                 self.config.funcs.get(ctx, "cgi-bin/template/get_all_private_template", {}, function (data) {
-                    self.config.children.templateList.items = data.template_list.filter(function (item) {
-                        return (item.template_id == componentData.lessonTemplateId || item.template_id == componentData.scoreTemplateId)
-                    }).map(function (item) {
-                        return JSON.stringify(item)
+                    data.template_list.forEach(function (item) {
+                        if (item.template_id == componentData.lessonTemplateId) {
+                            self.config.children.lessonTemplateHTML.html = "<div><p>" + item.title + "</p><p>" + item.example + "</p></div>"
+                        } else if (item.template_id == componentData.scoreTemplateId) {
+                            self.config.children.scoreTemplateHTML.html = "<div><p>" + item.title + "</p><p>" + item.example + "</p></div>"
+                        }
                     })
                 })
             })
@@ -50,10 +52,11 @@ eval({
         }
     },
     children: {
-        primaryIndustry: {type: "InputItem", label: "主行业", value: "",},
-        secondaryIndustry: {type: "InputItem", label: "副行业", value: "",},
-        lessonTemplate: {type: "InputItem", label: "课表推送模板", value: ""},
-        scoreTemplate: {type: "InputItem", label: "成绩推送模板", value: ""},
-        templateList: {type: "ListItem", label: "模版列表", items: [],},
+        primaryIndustry: {type: "InputItem", label: "主行业", value: "", readonly: true},
+        secondaryIndustry: {type: "InputItem", label: "副行业", value: "", readonly: true},
+        lessonTemplate: {type: "InputItem", label: "课表推送模板", value: "", readonly: true},
+        lessonTemplateHTML: {type: "SlotItem", html: ""},
+        scoreTemplate: {type: "InputItem", label: "成绩推送模板", value: "", readonly: true},
+        scoreTemplateHTML: {type: "SlotItem", html: ""},
     }
 })
