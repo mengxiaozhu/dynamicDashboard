@@ -1,7 +1,7 @@
 eval({
     label: "关键字",
     tmp: {},
-    ds: {modules: {3: "课表", 4: "成绩", 50: "成绩推送"}},
+    ds: {modules: {3: "课表", 4: "成绩", 24: "评教"}},
     funcs: {
         get: function (ctx, url, data, handler) {
             var self = ctx("this")
