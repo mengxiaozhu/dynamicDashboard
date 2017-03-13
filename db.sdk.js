@@ -8,7 +8,7 @@ eval({
                 params = params || {}
                 params["mpId"] = mp.id;
                 $.getJSON("/api/mp/dynamic/db/" + table + "/" + method, params, function (resp) {
-                    handler(resp);
+                    handler(resp.data);
                 });
             }
         }

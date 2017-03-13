@@ -39,7 +39,7 @@ eval({
                 options.push({name: name, value: id})
             }
             self.config.children.moduleSelect.options = options;
-            self.config.funcs.db(ctx, "keywords", "list", {}, function (keywords) {
+            self.sdk.db.base("keywords", "list", {}, function (keywords) {
                 self.config.children.keywordsList.items = keywords.map(function (keyword) {
                     return keyword.regexp + "->" + self.config.funcs.module(self.config.ds.modules, keyword.moduleId)
                 })
