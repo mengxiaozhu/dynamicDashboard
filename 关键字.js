@@ -32,7 +32,9 @@ eval({
 
 
         ready: function (ctx) {
-            var self = ctx("this")
+            var context = ctx()
+            var self = context.me
+            var select = context.select
             var options = []
             for (var id in self.config.ds.modules) {
                 var name = self.config.ds.modules[id]
@@ -40,8 +42,17 @@ eval({
             }
             self.config.children.moduleSelect.options = options;
             self.sdk.db.base("keywords", "list", {}, function (keywords) {
+                keywords = keywords.filter(function (keyword) {
+                    return !keyword.deletedTime
+                })
                 self.config.children.keywordsList.items = keywords.map(function (keyword) {
                     return keyword.regexp + "->" + self.config.funcs.module(self.config.ds.modules, keyword.moduleId)
+                })
+
+                var options = {}
+
+                select("toDeleteSelect").options = keywords.map(function (keyword) {
+                    return {name: keyword.regexp, value: keyword.id}
                 })
             })
 
@@ -50,14 +61,34 @@ eval({
     },
     children: {
         keywordsList: {type: "ListItem", label: "关键字列表", items: []},
+        toDeleteSelect: {type: "SelectItem", label: "需要删除的关键字", options: []},
+        deleteButton: {
+            type: "ButtonItem", label: "删除这个关键字", func: function (ctx) {
+                var context = ctx()
+
+                var me = context.me
+                var sdk = me.sdk
+                var select = context.select
+                var funcs = context.funcs
+                sdk.db.base("keywords", "remove", {id: select("toDeleteSelect").value}, function () {
+                    funcs.ready(ctx)
+                })
+            }
+        },
         regexpInput: {type: "InputItem", label: "新关键字规则(正则)", value: ""},
         moduleSelect: {type: "SelectItem", label: "新关键字模块", options: []},
         addButton: {
             type: "ButtonItem", label: "添加关键字", func: function (ctx) {
                 var self = ctx("this")
+                var regexp = self.config.children.regexpInput.value
+                var moduleID = self.config.children.moduleSelect.value
+                if (!moduleID || !regexp) {
+                    alert("无效输入")
+                    return
+                }
                 self.config.funcs.db(ctx, "keywords", "add", {
-                    moduleID: self.config.children.moduleSelect.value,
-                    regexp: self.config.children.regexpInput.value
+                    moduleID: moduleID,
+                    regexp: regexp
                 }, function () {
                     self.config.funcs.ready(ctx)
                 })
