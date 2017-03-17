@@ -30,17 +30,35 @@ eval({
             return modules[id]
         },
 
+        loadModulesToSelect: function (ctx) {
+            var context = ctx()
+            var self = context.me
+            var select = context.select
+            // 获取所有模块
+            self.sdk.db.base("module", "list", {}, function (modules) {
+                var ms = {}
+                modules.forEach(function (module) {
+                    ms[module.id] = module.name
+                })
+                self.config.ds.modules = ms
+                var options = []
+                for (var id in self.config.ds.modules) {
+                    var name = self.config.ds.modules[id]
+                    options.push({name: name, value: id})
+                }
+                self.config.children.moduleSelect.options = options;
+            })
+        },
+
 
         ready: function (ctx) {
             var context = ctx()
             var self = context.me
             var select = context.select
-            var options = []
-            for (var id in self.config.ds.modules) {
-                var name = self.config.ds.modules[id]
-                options.push({name: name, value: id})
-            }
-            self.config.children.moduleSelect.options = options;
+
+            self.config.funcs.loadModulesToSelect(ctx)
+
+            // 获取现有关键字
             self.sdk.db.base("keywords", "list", {}, function (keywords) {
                 keywords = keywords.filter(function (keyword) {
                     return !keyword.deletedTime
