@@ -61,7 +61,8 @@ eval({
                 if (!componentData.lessonTemplateId) {
                     ctx("http")("get", "/api/component/template/lesson/enable", {
                         params: {
-                            mpId: ctx("mp").id
+                            mpId: ctx("mp").id,
+                            componentId:componentData.id,
                         }
                     }).then(function (resp) {
                         alert("课表推送模板添加成功!")
@@ -72,7 +73,8 @@ eval({
                 if (!componentData.scoreTemplateId) {
                     ctx("http")("get", "/api/component/template/score/enable", {
                         params: {
-                            mpId: ctx("mp").id
+                            mpId: ctx("mp").id,
+                            componentId:componentData.id,
                         }
                     }).then(function (resp) {
                         alert("成绩推送模板添加成功!")
